@@ -26,6 +26,7 @@
 #include "keymap_estonian.h"
 #include "keymap_belgian.h"
 #include "keymap_us_international.h"
+#include "vim.h"
 
 #define KC_MAC_UNDO LGUI(KC_Z)
 #define KC_MAC_CUT LGUI(KC_X)
@@ -44,13 +45,15 @@
 #define BP_NDSH_MAC ALGR(KC_8)
 #define MOON_LED_LEVEL LED_LEVEL
 
+#define VERSION_STRING QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION
+
 enum custom_keycodes {
   RGB_SLD = ML_SAFE_RANGE,
   ST_MACRO_0,
   ST_MACRO_1,
   ST_MACRO_2,
   ST_MACRO_3,
-  ST_MACRO_VISUAL_MODE,
+  ST_MACRO_V,
 };
 
 
@@ -81,40 +84,48 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,         KC_Q,           TD(DANCE_4),    KC_E,           TD(DANCE_5),    TD(DANCE_6),    TT(3),                                          TT(3),          KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           TD(DANCE_14),   
     KC_BSPACE,      TD(DANCE_7),    KC_S,           KC_D,           TD(DANCE_8),    KC_G,           TT(2),                                                                          TT(2),          KC_H,           KC_J,           KC_K,           KC_L,           KC_SCOLON,      KC_QUOTE,       
     KC_LSHIFT,      LCTL_T(KC_Z),   TD(DANCE_9),    TD(DANCE_10),   TD(DANCE_11),   KC_B,                                           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         RCTL_T(KC_SLASH),KC_RSHIFT,      
-    KC_GRAVE,       KC_LCTRL,       TD(DANCE_12),   KC_LBRACKET,    KC_RBRACKET,    LALT_T(KC_APPLICATION),                                                                                                LCTL_T(KC_EQUAL),KC_TRANSPARENT, KC_TRANSPARENT, WEBUSB_PAIR,    KC_RCTRL,       KC_KP_ENTER,    
+    KC_GRAVE,       KC_LCTRL,       TD(DANCE_12),   KC_LBRACKET,    KC_RBRACKET,    LALT_T(KC_APPLICATION),                                                                                                LCTL_T(KC_EQUAL),KC_TRNS, KC_TRNS, WEBUSB_PAIR,    KC_RCTRL,       KC_KP_ENTER,    
     KC_SPACE,       KC_BSPACE,      KC_LGUI,                        KC_ENTER,       KC_DELETE,      KC_SPACE
   ),
   [1] = LAYOUT_moonlander(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_HOME,        TD(DANCE_16),   
-    KC_TRANSPARENT, KC_TRANSPARENT, LCTL(KC_RIGHT), KC_TRANSPARENT, LCTL(KC_Y),     KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_PC_COPY,     LCTL(KC_Z),     TO(0),          ST_MACRO_1,     KC_PC_PASTE,    TD(DANCE_17),   
-    KC_TRANSPARENT, KC_TRANSPARENT, TD(DANCE_15),   ST_MACRO_0,     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_DELETE,      KC_TRANSPARENT, ST_MACRO_VISUAL_MODE, LCTL(KC_LEFT),                                  KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRNS, KC_TRNS, KC_TRNS,	KC_TRNS, 	KC_TRNS, 	KC_TRNS, 		KC_TRNS,								KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS, KC_TRNS,		KC_HOME,	TD(DANCE_16),   
+    KC_TRNS, KC_TRNS, VIM_W, 		VIM_E, 		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_Y,		VIM_U, 		VIM_I,    VIM_O,   		VIM_P,		TD(DANCE_17),   
+    KC_TRNS, VIM_A, 	VIM_S,		VIM_D,		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_H,		VIM_J,   	VIM_K,    VIM_L,		KC_TRNS,	KC_TRNS, 
+    KC_TRNS, KC_TRNS, VIM_X,		VIM_C,		VIM_V,		VIM_B,													KC_TRNS, 	KC_TRNS,	KC_TRNS, KC_TRNS, 	KC_TRNS,	KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS,	KC_TRNS, 	KC_TRNS, 					KC_TRNS,								KC_TRNS, 				KC_TRNS, 	KC_TRNS, KC_TRNS, 	KC_TRNS,	KC_TRNS,
+																KC_TRNS, 		KC_TRNS,	KC_TRNS,		KC_TRNS,	KC_TRNS, 	KC_TRNS
   ),
+  /*[1] = LAYOUT_moonlander(
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_HOME,        TD(DANCE_16),   
+    KC_TRNS, KC_TRNS, LCTL(KC_RIGHT), KC_TRNS, LCTL(KC_Y),     KC_TRNS, KC_TRNS,                                 KC_TRNS, KC_PC_COPY,     LCTL(KC_Z),     TO(0),          ST_MACRO_1,     KC_PC_PASTE,    TD(DANCE_17),   
+    KC_TRNS, KC_TRNS, TD(DANCE_15),   ST_MACRO_0,     KC_TRNS, KC_TRNS, KC_TRNS,                                                                 KC_TRNS, KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_DELETE,      KC_TRNS, ST_MACRO_V, LCTL(KC_LEFT),                                  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                                                                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS,                 KC_TRNS, KC_TRNS, KC_TRNS
+  ),*/
   [2] = LAYOUT_moonlander(
-    KC_ESCAPE,      KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_F6,          KC_KP_EQUAL,    KC_KP_SLASH,    KC_KP_ASTERISK, KC_KP_MINUS,    KC_F11,         
-    KC_TRANSPARENT, KC_EXLM,        KC_AT,          KC_LCBR,        KC_RCBR,        KC_PIPE,        KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_UP,          KC_KP_7,        KC_KP_8,        KC_KP_9,        KC_KP_PLUS,     KC_F12,         
-    KC_TRANSPARENT, KC_HASH,        KC_DLR,         KC_LPRN,        KC_RPRN,        KC_GRAVE,       KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_DOWN,        KC_KP_4,        KC_KP_5,        KC_KP_6,        KC_KP_PLUS,     KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_PERC,        KC_CIRC,        KC_LBRACKET,    KC_RBRACKET,    KC_TILD,                                        KC_AMPR,        KC_KP_1,        KC_KP_2,        KC_KP_3,        KC_KP_ENTER,    KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, RGB_MOD,                                                                                                        RGB_TOG,        KC_CALCULATOR,  KC_KP_0,        KC_KP_DOT,      KC_KP_ENTER,    KC_TRANSPARENT, 
+    KC_ESCAPE,      KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_TRNS,                                 KC_TRNS, KC_F6,          KC_KP_EQUAL,    KC_KP_SLASH,    KC_KP_ASTERISK, KC_KP_MINUS,    KC_F11,         
+    KC_TRNS, KC_EXLM,        KC_AT,          KC_LCBR,        KC_RCBR,        KC_PIPE,        KC_TRNS,                                 KC_TRNS, KC_UP,          KC_KP_7,        KC_KP_8,        KC_KP_9,        KC_KP_PLUS,     KC_F12,         
+    KC_TRNS, KC_HASH,        KC_DLR,         KC_LPRN,        KC_RPRN,        KC_GRAVE,       KC_TRNS,                                                                 KC_TRNS, KC_DOWN,        KC_KP_4,        KC_KP_5,        KC_KP_6,        KC_KP_PLUS,     KC_TRNS, 
+    KC_TRNS, KC_PERC,        KC_CIRC,        KC_LBRACKET,    KC_RBRACKET,    KC_TILD,                                        KC_AMPR,        KC_KP_1,        KC_KP_2,        KC_KP_3,        KC_KP_ENTER,    KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, RGB_MOD,                                                                                                        RGB_TOG,        KC_CALCULATOR,  KC_KP_0,        KC_KP_DOT,      KC_KP_ENTER,    KC_TRNS, 
     RGB_VAD,        RGB_VAI,        TOGGLE_LAYER_COLOR,                RGB_SLD,        RGB_HUD,        RGB_HUI
   ),
   [3] = LAYOUT_moonlander(
-    AU_TOG,         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, RESET,          
-    MU_TOG,         KC_TRANSPARENT, KC_MS_WH_DOWN,  KC_MS_UP,       KC_MS_WH_UP,    KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    MU_MOD,         KC_TRANSPARENT, KC_MS_LEFT,     KC_MS_DOWN,     KC_MS_RIGHT,    KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_MEDIA_PLAY_PAUSE,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_MEDIA_PREV_TRACK,KC_MEDIA_NEXT_TRACK,KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_MS_BTN1,     KC_MS_BTN2,     KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_AUDIO_VOL_UP,KC_AUDIO_VOL_DOWN,KC_AUDIO_MUTE,  KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_WWW_BACK
+    AU_TOG,         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, RESET,          
+    MU_TOG,         KC_TRNS, KC_MS_WH_DOWN,  KC_MS_UP,       KC_MS_WH_UP,    KC_TRNS, KC_TRNS,                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    MU_MOD,         KC_TRNS, KC_MS_LEFT,     KC_MS_DOWN,     KC_MS_RIGHT,    KC_TRNS, KC_TRNS,                                                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MEDIA_PLAY_PAUSE,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                 KC_TRNS, KC_TRNS, KC_MEDIA_PREV_TRACK,KC_MEDIA_NEXT_TRACK,KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_BTN1,     KC_MS_BTN2,     KC_TRNS,                                                                                                 KC_TRNS, KC_AUDIO_VOL_UP,KC_AUDIO_VOL_DOWN,KC_AUDIO_MUTE,  KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS,                 KC_TRNS, KC_TRNS, KC_WWW_BACK
   ),
   [4] = LAYOUT_moonlander(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, ST_MACRO_2,     ST_MACRO_3,     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                 KC_TRNS, ST_MACRO_2,     ST_MACRO_3,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                                                                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 
+    KC_TRNS, KC_TRNS, KC_TRNS,                 KC_TRNS, KC_TRNS, KC_TRNS
   ),
 };
 
@@ -178,6 +189,9 @@ void rgb_matrix_indicators_user(void) {
 static bool visual_mode;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  bool SHIFTED = (keyboard_report->mods & MOD_BIT(KC_LSFT)) |
+                 (keyboard_report->mods & MOD_BIT(KC_RSFT));
+				 
   switch (keycode) {
     case ST_MACRO_0:
     if (record->event.pressed) {
@@ -203,7 +217,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     }
     break;
-    case ST_MACRO_VISUAL_MODE:
+    case ST_MACRO_V:
     if (record->event.pressed) {
       if (visual_mode) {
         SEND_STRING(SS_UP(X_LSHIFT));
@@ -218,6 +232,157 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         rgblight_mode(1);
       }
       return false;
+	break;
+
+    case VIM_A:
+      if (record->event.pressed) { SHIFTED ? VIM_APPEND_LINE() : VIM_APPEND(); }
+      return false;
+
+    case VIM_B:
+      if (record->event.pressed) {
+        switch(VIM_QUEUE) {
+          case KC_NO: VIM_BACK(); break;
+          case VIM_C: VIM_CHANGE_BACK(); break;
+          case VIM_D: VIM_DELETE_BACK(); break;
+          case VIM_V: VIM_VISUAL_BACK(); break;
+        }
+      }
+      return false;
+
+    case VIM_C:
+      if (record->event.pressed) {
+        switch(VIM_QUEUE) {
+          case KC_NO: SHIFTED ? VIM_CHANGE_LINE() : VIM_LEADER(VIM_C); break;
+          case VIM_C: VIM_CHANGE_WHOLE_LINE(); break;
+        }
+      }
+      return false;
+
+    case VIM_D:
+      if (record->event.pressed) {
+        switch(VIM_QUEUE) {
+          case KC_NO: SHIFTED ? VIM_DELETE_LINE() : VIM_LEADER(VIM_D); break;
+          case VIM_D: VIM_DELETE_WHOLE_LINE(); break;
+        }
+      }
+      return false;
+
+    case VIM_E:
+      if (record->event.pressed) {
+        switch (VIM_QUEUE) {
+          case KC_NO: VIM_END(); break;
+          case VIM_C: VIM_CHANGE_END(); break;
+          case VIM_D: VIM_DELETE_END(); break;
+          case VIM_V: VIM_VISUAL_END(); break;
+        }
+      }
+      return false;
+
+    case VIM_H:
+      if (record->event.pressed) {
+        switch (VIM_QUEUE) {
+          case KC_NO: VIM_LEFT(); break;
+          case VIM_C: VIM_CHANGE_LEFT(); break;
+          case VIM_D: VIM_DELETE_LEFT(); break;
+          case VIM_V: VIM_VISUAL_LEFT(); break;
+        }
+      }
+      return false;
+
+    case VIM_I:
+      if (record->event.pressed) {
+        switch (VIM_QUEUE) {
+          case KC_NO: layer_on(INSERT_MODE); break;
+          case VIM_C: VIM_LEADER(VIM_CI); break;
+          case VIM_D: VIM_LEADER(VIM_DI); break;
+          case VIM_V: VIM_LEADER(VIM_VI); break;
+        }
+      }
+      return false;
+
+    case VIM_J:
+      if (record->event.pressed) {
+        switch (VIM_QUEUE) {
+          case KC_NO: SHIFTED ? VIM_JOIN() : VIM_DOWN(); break;
+          case VIM_C: VIM_CHANGE_DOWN(); break;
+          case VIM_D: VIM_DELETE_DOWN(); break;
+          case VIM_V: VIM_VISUAL_DOWN(); break;
+        }
+      }
+      return false;
+
+    case VIM_K:
+      if (record->event.pressed) {
+        switch (VIM_QUEUE) {
+          case KC_NO: VIM_UP(); break;
+          case VIM_C: VIM_CHANGE_UP(); break;
+          case VIM_D: VIM_DELETE_UP(); break;
+          case VIM_V: VIM_VISUAL_UP(); break;
+        }
+      }
+      return false;
+
+    case VIM_L:
+      if (record->event.pressed) {
+        switch (VIM_QUEUE) {
+          case KC_NO: VIM_RIGHT(); break;
+          case VIM_C: VIM_CHANGE_RIGHT(); break;
+          case VIM_D: VIM_DELETE_RIGHT(); break;
+          case VIM_V: VIM_VISUAL_RIGHT(); break;
+        }
+      }
+      return false;
+
+    case VIM_O:
+      if (record->event.pressed) { SHIFTED ? VIM_OPEN_ABOVE() : VIM_OPEN(); }
+      return false;
+
+    case VIM_P:
+      if (record->event.pressed) { SHIFTED ? VIM_PUT_BEFORE() : VIM_PUT(); }
+      return false;
+
+    case VIM_S:
+      if (record->event.pressed) { SHIFTED ? VIM_CHANGE_WHOLE_LINE() : VIM_SUBSTITUTE(); }
+      return false;
+
+    case VIM_U:
+      if (record->event.pressed) { VIM_UNDO(); }
+      return false;
+
+    case VIM_V:
+      if (record->event.pressed) { VIM_LEADER(VIM_V); }
+      return false;
+
+    case VIM_W:
+      if (record->event.pressed) {
+        switch (VIM_QUEUE) {
+          case KC_NO: VIM_WORD(); break;
+          case VIM_C: VIM_CHANGE_WORD(); break;
+          case VIM_CI: VIM_CHANGE_INNER_WORD(); break;
+          case VIM_D: VIM_DELETE_WORD(); break;
+          case VIM_DI: VIM_DELETE_INNER_WORD(); break;
+          case VIM_V: VIM_VISUAL_WORD(); break;
+          case VIM_VI: VIM_VISUAL_INNER_WORD(); break;
+        }
+      }
+      return false;
+
+    case VIM_X:
+      if (record->event.pressed) { VIM_CUT(); }
+      return false;
+
+    case VIM_Y:
+      if (record->event.pressed) { SHIFTED ? VIM_YANK_LINE() : VIM_YANK(); }
+      return false;
+
+    // dynamically generate these.
+    case EPRM:
+      if (record->event.pressed) { eeconfig_init(); }
+      return false;
+    case VRSN:
+      if (record->event.pressed) { SEND_STRING(VERSION_STRING); }
+      return false;
+
   }
   return true;
 }
