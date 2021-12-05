@@ -87,8 +87,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     MT(MOD_LGUI, KC_SPACE),KC_BSPACE,      KC_LGUI,                        KC_ENTER,       KC_DELETE,      KC_SPACE
   ),
   [1] = LAYOUT_moonlander(
-    KC_TRNS, KC_TRNS,	KC_TRNS,	KC_TRNS, 	KC_TRNS, 	KC_TRNS, 		KC_TRNS,								KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_HOME,	TD(DANCE_16),
-    KC_TRNS, KC_TRNS,	VIM_W, 		VIM_E, 		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_Y,		VIM_U, 		VIM_I,		VIM_O,		VIM_P,		TD(DANCE_17),
+    KC_TRNS, KC_TRNS,	KC_TRNS,	KC_TRNS, 	KC_TRNS, 	KC_TRNS, 		KC_TRNS,								KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_HOME,	TD(DANCE_15),
+    KC_TRNS, KC_TRNS,	VIM_W, 		VIM_E, 		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_Y,		VIM_U, 		VIM_I,		VIM_O,		VIM_P,		TD(DANCE_16),
     KC_TRNS, VIM_A,		VIM_S,		VIM_D,		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_H,		VIM_J,   	VIM_K,		VIM_L,		KC_TRNS,	KC_TRNS,
     KC_TRNS, KC_TRNS,	VIM_X,		VIM_C,		VIM_V,		VIM_B,																KC_TRNS, 	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,
     KC_TRNS, KC_TRNS,	KC_TRNS,	KC_TRNS, 	KC_TRNS, 					KC_TRNS,								KC_TRNS, 				KC_TRNS, 	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,
@@ -125,6 +125,8 @@ extern rgb_config_t rgb_matrix_config;
 
 void keyboard_post_init_user(void) {
   rgb_matrix_enable();
+  debug_enable=true;
+  debug_matrix=true;
 }
 
 const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
@@ -842,6 +844,7 @@ void dance_12_finished(qk_tap_dance_state_t *state, void *user_data) {
 
 void dance_12_reset(qk_tap_dance_state_t *state, void *user_data) {
     wait_ms(10);
+	switch (dance_state[12].step) {
         case SINGLE_TAP: unregister_code16(KC_0); break;
         case SINGLE_HOLD: unregister_code16(KC_HOME); break;
         case DOUBLE_TAP: unregister_code16(KC_0); break;
