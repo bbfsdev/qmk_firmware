@@ -28,7 +28,6 @@
 #include "keymap_us_international.h"
 #include "vim.h"
 
-
 #define KC_MAC_UNDO LGUI(KC_Z)
 #define KC_MAC_CUT LGUI(KC_X)
 #define KC_MAC_COPY LGUI(KC_C)
@@ -44,7 +43,6 @@
 #define NO_BSLS_ALT KC_EQUAL
 #define LSA_T(kc) MT(MOD_LSFT | MOD_LALT, kc)
 #define BP_NDSH_MAC ALGR(KC_8)
-
 #define SE_SECT_MAC ALGR(KC_6)
 #define MOON_LED_LEVEL LED_LEVEL
 
@@ -56,7 +54,6 @@ enum custom_keycodes {
   ST_MACRO_1,
   ST_MACRO_2,
   ST_MACRO_3,
-  ST_MACRO_V,
 };
 
 
@@ -80,7 +77,6 @@ enum tap_dance_codes {
   DANCE_16,
 };
 
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
     TD(DANCE_0),    TD(DANCE_1),    TD(DANCE_2),    TD(DANCE_3),    KC_4,           KC_5,           TT(4),                                          TT(4),          KC_6,           KC_7,           KC_8,           KC_9,           TD(DANCE_12),   KC_MINUS,       
@@ -91,12 +87,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     MT(MOD_LGUI, KC_SPACE),KC_BSPACE,      KC_LGUI,                        KC_ENTER,       KC_DELETE,      KC_SPACE
   ),
   [1] = LAYOUT_moonlander(
-    KC_TRNS, KC_TRNS, KC_TRNS,	KC_TRNS, 	KC_TRNS, 	KC_TRNS, 		KC_TRNS,								KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS, KC_TRNS,		KC_HOME,	TD(DANCE_16),   
-    KC_TRNS, KC_TRNS, VIM_W, 		VIM_E, 		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_Y,		VIM_U, 		VIM_I,    VIM_O,   		VIM_P,		TD(DANCE_17),   
-    KC_TRNS, VIM_A, 	VIM_S,		VIM_D,		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_H,		VIM_J,   	VIM_K,    VIM_L,		KC_TRNS,	KC_TRNS, 
-    KC_TRNS, KC_TRNS, VIM_X,		VIM_C,		VIM_V,		VIM_B,													KC_TRNS, 	KC_TRNS,	KC_TRNS, KC_TRNS, 	KC_TRNS,	KC_TRNS, 
-    KC_TRNS, KC_TRNS, KC_TRNS,	KC_TRNS, 	KC_TRNS, 					KC_TRNS,								KC_TRNS, 				KC_TRNS, 	KC_TRNS, KC_TRNS, 	KC_TRNS,	KC_TRNS,
-																KC_TRNS, 		KC_TRNS,	KC_TRNS,		KC_TRNS,	KC_TRNS, 	KC_TRNS
+    KC_TRNS, KC_TRNS,	KC_TRNS,	KC_TRNS, 	KC_TRNS, 	KC_TRNS, 		KC_TRNS,								KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_HOME,	TD(DANCE_16),
+    KC_TRNS, KC_TRNS,	VIM_W, 		VIM_E, 		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_Y,		VIM_U, 		VIM_I,		VIM_O,		VIM_P,		TD(DANCE_17),
+    KC_TRNS, VIM_A,		VIM_S,		VIM_D,		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_H,		VIM_J,   	VIM_K,		VIM_L,		KC_TRNS,	KC_TRNS,
+    KC_TRNS, KC_TRNS,	VIM_X,		VIM_C,		VIM_V,		VIM_B,																KC_TRNS, 	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,
+    KC_TRNS, KC_TRNS,	KC_TRNS,	KC_TRNS, 	KC_TRNS, 					KC_TRNS,								KC_TRNS, 				KC_TRNS, 	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,
+															KC_TRNS, 		KC_TRNS,	KC_TRNS,		KC_TRNS,	KC_TRNS, 	KC_TRNS
   ),
   [2] = LAYOUT_moonlander(
     KC_ESCAPE,      KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_F6,          KC_KP_EQUAL,    KC_KP_SLASH,    KC_KP_ASTERISK, KC_KP_MINUS,    KC_F11,         
@@ -181,8 +177,6 @@ void rgb_matrix_indicators_user(void) {
   }
 }
 
-static bool visual_mode;
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   bool SHIFTED = (keyboard_report->mods & MOD_BIT(KC_LSFT)) |
                  (keyboard_report->mods & MOD_BIT(KC_RSFT));
@@ -210,16 +204,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
       SEND_STRING(SS_LALT(SS_TAP(X_KP_PLUS) SS_TAP(X_KP_0) SS_TAP(X_KP_5) SS_TAP(X_D) SS_TAP(X_KP_0) ));
 
-    }
-    break;
-    case ST_MACRO_V:
-    if (record->event.pressed) {
-      if (visual_mode) {
-        SEND_STRING(SS_UP(X_LSHIFT));
-      } else {
-        SEND_STRING(SS_DOWN(X_LSHIFT));
-      }
-      visual_mode = !visual_mode;
     }
     break;
     case RGB_SLD:
