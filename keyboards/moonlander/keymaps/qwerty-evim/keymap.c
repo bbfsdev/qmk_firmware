@@ -79,16 +79,16 @@ enum tap_dance_codes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
-    TD(DANCE_0),    TD(DANCE_1),    TD(DANCE_2),    TD(DANCE_3),    KC_4,           KC_5,           TT(4),                                          TT(4),          KC_6,           KC_7,           KC_8,           KC_9,           TD(DANCE_12),   KC_MINUS,       
-    KC_TAB,         KC_Q,           TD(DANCE_4),    KC_E,           TD(DANCE_5),    TD(DANCE_6),    TT(3),                                          TT(3),          KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           TD(DANCE_13),   
-    KC_BSPACE,      TD(DANCE_7),    KC_S,           KC_D,           TD(DANCE_8),    KC_G,           TT(2),                                                                          TT(2),          KC_H,           KC_J,           KC_K,           KC_L,           KC_SCOLON,      KC_QUOTE,       
-    MT(MOD_LSFT, KC_BSPACE),MT(MOD_LCTL, KC_Z),TD(DANCE_9),    TD(DANCE_10),   TD(DANCE_11),   KC_B,                                           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         MT(MOD_RCTL, KC_SLASH),MT(MOD_RSFT, KC_KP_ENTER),
-    KC_GRAVE,       KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_LALT,        WEBUSB_PAIR,                                                                                                    KC_EQUAL,       KC_LBRACKET,    KC_RBRACKET,    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    MT(MOD_LGUI, KC_SPACE),KC_BSPACE,      KC_LGUI,                        KC_ENTER,       KC_DELETE,      KC_SPACE
+    TD(DANCE_0),    			TD(DANCE_1),    	TD(DANCE_2),    TD(DANCE_3),    KC_4,           KC_5,           TT(4),                                          TT(4),          KC_6,           KC_7,           KC_8,           KC_9,           TD(DANCE_12),   KC_MINUS,       
+    KC_TAB,         			KC_Q,           	TD(DANCE_4),    KC_E,           TD(DANCE_5),    TD(DANCE_6),    TT(3),                                          TT(3),          KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           TD(DANCE_13),   
+    KC_BSPACE,      			TD(DANCE_7),    	KC_S,           KC_D,           TD(DANCE_8),    KC_G,           TT(2),                                                                          TT(2),          KC_H,           KC_J,           KC_K,           KC_L,           KC_SCOLON,      KC_QUOTE,       
+    MT(MOD_LSFT, KC_BSPACE),	MT(MOD_LCTL, KC_Z),	TD(DANCE_9),    TD(DANCE_10),   TD(DANCE_11),   KC_B,                                           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         MT(MOD_RCTL, KC_SLASH),MT(MOD_RSFT, KC_KP_ENTER),
+    KC_GRAVE,       			KC_TRANSPARENT, 	KC_TRANSPARENT, KC_TRANSPARENT, KC_LALT,        WEBUSB_PAIR,                                                                                                    KC_EQUAL,       KC_LBRACKET,    KC_RBRACKET,    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
+    MT(MOD_LGUI, KC_SPACE),		KC_BSPACE,      	KC_LGUI,                        KC_ENTER,       KC_DELETE,      KC_SPACE
   ),
   [1] = LAYOUT_moonlander(
     KC_TRNS, KC_TRNS,	KC_TRNS,	KC_TRNS, 	KC_TRNS, 	KC_TRNS, 		KC_TRNS,								KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_HOME,	TD(DANCE_15),
-    KC_TRNS, KC_TRNS,	VIM_W, 		VIM_E, 		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_Y,		VIM_U, 		VIM_I,		VIM_O,		VIM_P,		TD(DANCE_16),
+    KC_TRNS, KC_TRNS,	VIM_W, 		VIM_E, 		VIM_R,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_Y,		VIM_U, 		VIM_I,		VIM_O,		VIM_P,		TD(DANCE_16),
     KC_TRNS, VIM_A,		VIM_S,		VIM_D,		KC_TRNS,	KC_TRNS, 		KC_TRNS,								KC_TRNS,	VIM_H,		VIM_J,   	VIM_K,		VIM_L,		KC_TRNS,	KC_TRNS,
     KC_TRNS, KC_TRNS,	VIM_X,		VIM_C,		VIM_V,		VIM_B,																KC_TRNS, 	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,
     KC_TRNS, KC_TRNS,	KC_TRNS,	KC_TRNS, 	KC_TRNS, 					KC_TRNS,								KC_TRNS, 				KC_TRNS, 	KC_TRNS,	KC_TRNS,	KC_TRNS,	KC_TRNS,
@@ -125,8 +125,8 @@ extern rgb_config_t rgb_matrix_config;
 
 void keyboard_post_init_user(void) {
   rgb_matrix_enable();
-  debug_enable=true;
-  debug_matrix=true;
+  //debug_enable=true;
+  //debug_matrix=true;
 }
 
 const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
@@ -137,7 +137,6 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
     [3] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,245,245}, {0,0,0}, {0,0,0}, {0,0,0}, {0,245,245}, {0,245,245}, {0,0,0}, {0,245,245}, {0,0,0}, {0,0,0}, {0,245,245}, {0,0,0}, {0,245,245}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {188,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,245,245}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {74,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0} },
 
     [4] = { {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255} },
-
 };
 
 void set_layer_color(int layer) {
@@ -180,8 +179,9 @@ void rgb_matrix_indicators_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  bool SHIFTED = (keyboard_report->mods & MOD_BIT(KC_LSFT)) |
-                 (keyboard_report->mods & MOD_BIT(KC_RSFT));
+  bool l_shifted = (keyboard_report->mods & MOD_BIT(KC_LSFT));
+  bool r_shifted = (keyboard_report->mods & MOD_BIT(KC_RSFT));
+  bool SHIFTED = l_shifted | r_shifted;
 				 
   switch (keycode) {
     case ST_MACRO_0:
@@ -273,7 +273,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case VIM_I:
       if (record->event.pressed) {
         switch (VIM_QUEUE) {
-          case KC_NO: layer_on(INSERT_MODE); break;
+          case KC_NO: layer_move(INSERT_MODE); break;
           case VIM_C: VIM_LEADER(VIM_CI); break;
           case VIM_D: VIM_LEADER(VIM_DI); break;
           case VIM_V: VIM_LEADER(VIM_VI); break;
@@ -319,7 +319,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
 
     case VIM_P:
-      if (record->event.pressed) { SHIFTED ? VIM_PUT_BEFORE() : VIM_PUT(); }
+      if (record->event.pressed) { SHIFTED ? VIM_PUT_BEFORE(l_shifted, r_shifted) : VIM_PUT(); }
+      return false;
+
+    case VIM_R:
+      if (record->event.pressed) { SHIFTED ? VIM_REDO() : VIM_LEADER(VIM_R); }
       return false;
 
     case VIM_S:
