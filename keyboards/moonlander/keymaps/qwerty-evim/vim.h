@@ -211,9 +211,9 @@ void VIM_LEFT(void) {
 void VIM_OPEN(void) {
   print("VIM_OPEN\n");
   VIM_LEADER(KC_NO);
-  CMD(KC_RIGHT);
+  TAP(KC_END);
   TAP(KC_ENTER);
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
