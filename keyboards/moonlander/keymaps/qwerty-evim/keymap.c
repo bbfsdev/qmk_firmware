@@ -26,6 +26,7 @@
 #include "keymap_estonian.h"
 #include "keymap_belgian.h"
 #include "keymap_us_international.h"
+#include "vim.h"
 
 #define KC_MAC_UNDO LGUI(KC_Z)
 #define KC_MAC_CUT LGUI(KC_X)
@@ -83,12 +84,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     MT(MOD_LGUI, KC_SPACE),KC_BSPACE,      KC_LGUI,                        KC_ENTER,       KC_DELETE,      KC_SPACE
   ),
   [1] = LAYOUT_moonlander(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_HOME,        TD(DANCE_14),   
-    KC_TRANSPARENT, KC_TRANSPARENT, LCTL(KC_RIGHT), KC_TRANSPARENT, LCTL(KC_Y),     KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_PC_COPY,     LCTL(KC_Z),     TO(0),          ST_MACRO_1,     KC_PC_PASTE,    TD(DANCE_15),   
-    KC_TRANSPARENT, KC_TRANSPARENT, TD(DANCE_13),   ST_MACRO_0,     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_DELETE,      KC_TRANSPARENT, KC_TRANSPARENT, LCTL(KC_LEFT),                                  KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+  VIM_ESC, KC_TRNS, KC_TRNS, KC_TRNS, VIM_4,   KC_TRNS, KC_TRNS,                   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_HOME, TD(DANCE_14),
+  KC_TRNS, KC_TRNS, VIM_W,   VIM_E,   VIM_R,   KC_TRNS, KC_TRNS,                   KC_TRNS, VIM_Y,   VIM_U,   VIM_I,   VIM_O,   VIM_P,   TD(DANCE_15),
+  KC_TRNS, VIM_A,   VIM_S,   VIM_D,   KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS, VIM_H,   VIM_J,   VIM_K,   VIM_L,   KC_TRNS, KC_TRNS,
+  KC_TRNS, KC_TRNS, VIM_X,   VIM_C,   VIM_V,   VIM_B,                                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,                   KC_TRNS,          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                                             KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
   ),
   [2] = LAYOUT_moonlander(
     KC_ESCAPE,      KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_F6,          KC_KP_EQUAL,    KC_KP_SLASH,    KC_KP_ASTERISK, KC_KP_MINUS,    KC_F11,         
@@ -178,37 +179,214 @@ void rgb_matrix_indicators_user(void) {
   }
 }
 
+// Return true to handle the default key anyway, false for custom behavior.
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  bool l_shifted = (keyboard_report->mods & MOD_BIT(KC_LSFT));
+  bool r_shifted = (keyboard_report->mods & MOD_BIT(KC_RSFT));
+  bool SHIFTED = l_shifted | r_shifted;
+     
   switch (keycode) {
-    case ST_MACRO_0:
-    if (record->event.pressed) {
-      SEND_STRING(SS_TAP(X_HOME) SS_DELAY(100) SS_LSFT(SS_TAP(X_END)) SS_DELAY(100) SS_LSFT(SS_TAP(X_DELETE)));
+  case ST_MACRO_0:
+  if (record->event.pressed) {
+    SEND_STRING(SS_TAP(X_HOME) SS_DELAY(100) SS_LSFT(SS_TAP(X_END)) SS_DELAY(100) SS_LSFT(SS_TAP(X_DELETE)));
 
-    }
-    break;
-    case ST_MACRO_1:
-    if (record->event.pressed) {
-      SEND_STRING(SS_TAP(X_END) SS_DELAY(100) SS_TAP(X_KP_ENTER));
+  }
+  break;
+  case ST_MACRO_1:
+  if (record->event.pressed) {
+    SEND_STRING(SS_TAP(X_END) SS_DELAY(100) SS_TAP(X_KP_ENTER));
 
-    }
-    break;
-    case ST_MACRO_2:
-    if (record->event.pressed) {
-      SEND_STRING(SS_TAP(X_Y) SS_DELAY(100) SS_TAP(X_Y) SS_DELAY(100) SS_TAP(X_Y));
+  }
+  break;
+  case ST_MACRO_2:
+  if (record->event.pressed) {
+    SEND_STRING(SS_TAP(X_Y) SS_DELAY(100) SS_TAP(X_Y) SS_DELAY(100) SS_TAP(X_Y));
 
-    }
-    break;
-    case ST_MACRO_3:
-    if (record->event.pressed) {
-      SEND_STRING(SS_LALT(SS_TAP(X_KP_PLUS) SS_TAP(X_KP_0) SS_TAP(X_KP_5) SS_TAP(X_D) SS_TAP(X_KP_0) ));
+  }
+  break;
+  case ST_MACRO_3:
+  if (record->event.pressed) {
+    SEND_STRING(SS_LALT(SS_TAP(X_KP_PLUS) SS_TAP(X_KP_0) SS_TAP(X_KP_5) SS_TAP(X_D) SS_TAP(X_KP_0) ));
 
+  }
+  break;
+  case RGB_SLD:
+    if (record->event.pressed) {
+    rgblight_mode(1);
     }
-    break;
-    case RGB_SLD:
-      if (record->event.pressed) {
-        rgblight_mode(1);
+    return false;
+  break;
+
+  case VIM_A:
+    if (record->event.pressed) { SHIFTED ? VIM_APPEND_LINE(l_shifted, r_shifted) : VIM_APPEND(); }
+    return false;
+
+  case VIM_B:
+    if (record->event.pressed) {
+    switch(VIM_QUEUE) {
+      case KC_NO: VIM_BACK(); break;
+      case VIM_C: VIM_CHANGE_BACK(); break;
+      case VIM_D: VIM_DELETE_BACK(); break;
+      case VIM_V: VIM_VISUAL_BACK(); break;
+    }
+    }
+    return false;
+
+  case VIM_C:
+    if (record->event.pressed) {
+      switch(VIM_QUEUE) {
+        case KC_NO: SHIFTED ? VIM_CHANGE_LINE() : VIM_LEADER(VIM_C); break;
+        case VIM_C: VIM_CHANGE_WHOLE_LINE(); break;
       }
-      return false;
+    }
+    return false;
+
+  case VIM_D:
+    if (record->event.pressed) {
+      switch(VIM_QUEUE) {
+        case KC_NO: SHIFTED ? VIM_DELETE_LINE() : VIM_LEADER(VIM_D); break;
+        case VIM_D: VIM_DELETE_WHOLE_LINE(); break;
+        case VIM_V: VIM_DELETE_VISUAL(); break;
+      }
+    }
+    return false;
+
+  case VIM_E:
+    if (record->event.pressed) {
+      switch (VIM_QUEUE) {
+        case KC_NO: VIM_WORD_END(); break;
+        case VIM_C: VIM_CHANGE_END(); break;
+        case VIM_D: VIM_DELETE_END(); break;
+        case VIM_V: VIM_VISUAL_END(); break;
+      }
+    }
+    return false;
+
+  case VIM_H:
+    if (record->event.pressed) {
+    switch (VIM_QUEUE) {
+      case KC_NO: VIM_LEFT(); break;
+      case VIM_C: VIM_CHANGE_LEFT(); break;
+      case VIM_D: VIM_DELETE_LEFT(); break;
+      case VIM_V: VIM_VISUAL_LEFT(); break;
+    }
+    }
+    return false;
+
+  case VIM_I:
+    if (record->event.pressed) {
+      switch (VIM_QUEUE) {
+        case KC_NO: layer_move(INSERT_MODE); break;
+        case VIM_C: VIM_LEADER(VIM_CI); break;
+        case VIM_D: VIM_LEADER(VIM_DI); break;
+        case VIM_V: VIM_LEADER(VIM_VI); break;
+      }
+    }
+    return false;
+
+  case VIM_J:
+    if (record->event.pressed) {
+      switch (VIM_QUEUE) {
+        case KC_NO: SHIFTED ? VIM_JOIN() : VIM_DOWN(); break;
+        case VIM_C: VIM_CHANGE_DOWN(); break;
+        case VIM_D: VIM_DELETE_DOWN(); break;
+        case VIM_V: VIM_VISUAL_DOWN(); break;
+      }
+    }
+    return false;
+
+  case VIM_K:
+    if (record->event.pressed) {
+    switch (VIM_QUEUE) {
+      case KC_NO: VIM_UP(); break;
+      case VIM_C: VIM_CHANGE_UP(); break;
+      case VIM_D: VIM_DELETE_UP(); break;
+      case VIM_V: VIM_VISUAL_UP(); break;
+    }
+    }
+    return false;
+
+  case VIM_L:
+    if (record->event.pressed) {
+    switch (VIM_QUEUE) {
+      case KC_NO: VIM_RIGHT(); break;
+      case VIM_C: VIM_CHANGE_RIGHT(); break;
+      case VIM_D: VIM_DELETE_RIGHT(); break;
+      case VIM_V: VIM_VISUAL_RIGHT(); break;
+    }
+    }
+    return false;
+
+  case VIM_O:
+    if (record->event.pressed) { SHIFTED ? VIM_OPEN_ABOVE() : VIM_OPEN(); }
+    return false;
+
+  case VIM_P:
+    if (record->event.pressed) { SHIFTED ? VIM_PUT_BEFORE(l_shifted, r_shifted) : VIM_PUT(); }
+    return false;
+
+  case VIM_R:
+    if (record->event.pressed) { SHIFTED ? VIM_REDO() : VIM_LEADER(VIM_R); }
+    return false;
+
+  case VIM_S:
+    if (record->event.pressed) { 
+      switch (VIM_QUEUE) {
+        case KC_NO: SHIFTED ? VIM_CHANGE_WHOLE_LINE() : VIM_SUBSTITUTE(); break;
+        case VIM_V: VIM_CHANGE_VISUAL(); break; 
+      }
+    }
+    return false;
+
+  case VIM_U:
+    if (record->event.pressed) { VIM_UNDO(); }
+    return false;
+
+  case VIM_V:
+    if (record->event.pressed) { VIM_LEADER(VIM_V); }
+    return false;
+
+  case VIM_W:
+    if (record->event.pressed) {
+      switch (VIM_QUEUE) {
+        case KC_NO: VIM_WORD(); break;
+        case VIM_C: VIM_CHANGE_WORD(); break;
+        case VIM_CI: VIM_CHANGE_INNER_WORD(); break;
+        case VIM_D: VIM_DELETE_WORD(); break;
+        case VIM_DI: VIM_DELETE_INNER_WORD(); break;
+        case VIM_V: VIM_VISUAL_WORD(); break;
+        case VIM_VI: VIM_VISUAL_INNER_WORD(); break;
+      }
+    }
+    return false;
+
+  case VIM_X:
+    if (record->event.pressed) { VIM_DELETE(); }
+    return false;
+
+  case VIM_Y:
+    if (record->event.pressed) { SHIFTED ? VIM_YANK_LINE() : VIM_YANK(); }
+    return false;
+
+  case VIM_4:
+    if (record->event.pressed) { 
+      if (SHIFTED) { VIM_LINE_END(); }
+    }
+    return false;
+  
+  case VIM_ESC:
+    if (record->event.pressed) {
+      VIM_LEADER(KC_NO);
+    }
+    return false;
+
+  // dynamically generate these.
+  case EPRM:
+    if (record->event.pressed) { eeconfig_init(); }
+    return false;
+  case VRSN:
+    if (record->event.pressed) { SEND_STRING(VERSION_STRING); }
+    return false;
   }
   return true;
 }

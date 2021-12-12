@@ -4,6 +4,10 @@
 #include "quantum.h"
 #include "quantum_keycodes.h"
 
+#define INSERT_MODE 0
+#define NORMAL_MODE 1
+#define VERSION_STRING QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION
+
 #define NOR_MOD TO(NORMAL_MODE)
 #define INS_MOD TO(INSERT_MODE)
 
@@ -38,10 +42,12 @@ enum vim_custom_keycodes {
   VIM_Y,
   EPRM,
   VRSN,
+  VIM_4,
+  VIM_ESC,
 };
 
 void VIM_APPEND(void);
-void VIM_APPEND_LINE(void);
+void VIM_APPEND_LINE(bool l_shifted, bool r_shifted);
 void VIM_BACK(void);
 void VIM_CHANGE_BACK(void);
 void VIM_CHANGE_DOWN(void);
@@ -53,7 +59,8 @@ void VIM_CHANGE_RIGHT(void);
 void VIM_CHANGE_UP(void);
 void VIM_CHANGE_WHOLE_LINE(void);
 void VIM_CHANGE_WORD(void);
-void VIM_CUT(void);
+void VIM_CHANGE_VISUAL(void);
+void VIM_DELETE(void);
 void VIM_DELETE_BACK(void);
 void VIM_DELETE_DOWN(void);
 void VIM_DELETE_END(void);
@@ -64,7 +71,8 @@ void VIM_DELETE_RIGHT(void);
 void VIM_DELETE_UP(void);
 void VIM_DELETE_WHOLE_LINE(void);
 void VIM_DELETE_WORD(void);
-void VIM_END(void);
+void VIM_DELETE_VISUAL(void);
+void VIM_WORD_END(void);
 void VIM_JOIN(void);
 void VIM_OPEN(void);
 void VIM_OPEN_ABOVE(void);
@@ -150,7 +158,7 @@ void VIM_LEADER(uint16_t keycode) {
 void VIM_APPEND(void) {
   print("VIM_APPEND\n");
   TAP(KC_RIGHT);
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -169,10 +177,9 @@ void VIM_BACK(void) {
  * Vim-like `cut` command
  * Simulates vim's `x` command by sending ⇧→ then ⌘X.
  */
-void VIM_CUT(void) {
-  print("VIM_CUT\n");
-  SHIFT(KC_RIGHT);
-  CMD(KC_X);
+void VIM_DELETE(void) {
+  print("VIM_DELETE\n");
+  TAP(KC_DEL);
 }
 
 /**
@@ -188,9 +195,25 @@ void VIM_DOWN(void) {
  * Vim-like `end` command
  * Simulates vim's `e` command by sending ⌥→
  */
-void VIM_END(void) {
-  print("VIM_END\n");
+void VIM_WORD_END(void) {
+  print("VIM_WORD_END\n");
   CTRL(KC_RIGHT);
+}
+
+/**
+ * Simulates vim's `$` command by sending end
+ */
+void VIM_LINE_END(void) {
+  print("VIM_LINE_END");
+  TAP(KC_END);
+}
+
+/**
+ * Simulates vim's `0` command by sending home
+ */
+void VIM_LINE_HOME(void) {
+  print("VIM_LINE_HOME");
+  TAP(KC_HOME);
 }
 
 /**
@@ -272,8 +295,8 @@ void VIM_SUBSTITUTE(void) {
   print("VIM_SUBSTITUTE\n");
   VIM_LEADER(KC_NO);
   SHIFT(KC_RIGHT);
-  CMD(KC_X);
-  layer_on(INSERT_MODE);
+  SHIFT(KC_DEL);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -352,11 +375,15 @@ void VIM_YANK_LINE(void) {
  * Vim-like `append to line` command
  * Simulates vim's `A` command by sending ⌘→ then switching to insert mode.
  */
-void VIM_APPEND_LINE(void) {
+void VIM_APPEND_LINE(bool l_shifted, bool r_shifted) {
   print("VIM_APPEND_LINE\n");
   VIM_LEADER(KC_NO);
-  CMD(KC_RIGHT);
-  layer_on(INSERT_MODE);
+  if (l_shifted) RELEASE(KC_LSHIFT);
+  if (r_shifted) RELEASE(KC_RSHIFT);
+  TAP(KC_END);
+  if (l_shifted) PRESS(KC_LSHIFT);
+  if (r_shifted) PRESS(KC_RSHIFT);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -367,7 +394,7 @@ void VIM_CHANGE_LINE(void) {
   print("VIM_CHANGE_LINE\n");
   VIM_LEADER(KC_NO);
   VIM_DELETE_LINE();
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -377,7 +404,8 @@ void VIM_CHANGE_LINE(void) {
 void VIM_DELETE_LINE(void) {
   print("VIM_DELETE_LINE\n");
   VIM_LEADER(KC_NO);
-  CTRL(KC_K);
+  SHIFT(KC_END);
+  SHIFT(KC_DEL);
 }
 
 /**
@@ -405,7 +433,7 @@ void VIM_OPEN_ABOVE(void) {
   CMD(KC_LEFT);
   TAP(KC_ENTER);
   TAP(KC_UP);
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -416,7 +444,7 @@ void VIM_OPEN_ABOVE(void) {
 void VIM_CHANGE_WHOLE_LINE(void) {
   print("VIM_CHANGE_WHOLE_LINE\n");
   VIM_LEADER(KC_NO);
-  CMD(KC_LEFT);
+  TAP(KC_HOME);
   VIM_CHANGE_LINE();
 }
 
@@ -441,7 +469,7 @@ void VIM_DELETE_END(void) {
   PRESS(KC_LCTRL);
     SHIFT(KC_RIGHT); // select to end of this word
   RELEASE(KC_LCTRL);
-  CMD(KC_X);
+  SHIFT(KC_DEL);
 }
 
 /**
@@ -457,7 +485,7 @@ void VIM_DELETE_WHOLE_LINE(void) {
   PRESS(KC_LSHIFT);
     CMD(KC_RIGHT);
   RELEASE(KC_LSHIFT);
-  CMD(KC_X);
+  SHIFT(KC_DEL);
 }
 
 /**
@@ -473,7 +501,7 @@ void VIM_DELETE_WORD(void) {
     SHIFT(KC_RIGHT); // select to end of next word
     SHIFT(KC_LEFT); // select to start of next word
   RELEASE(KC_LCTRL);
-  CMD(KC_X); // delete selection
+  SHIFT(KC_DEL); // delete selection
 }
 
 /**
@@ -497,7 +525,7 @@ void VIM_DELETE_LEFT(void) {
   print("VIM_DELETE_LEFT\n");
   VIM_LEADER(KC_NO);
   SHIFT(KC_LEFT);
-  CMD(KC_X);
+  SHIFT(KC_DEL);
 }
 
 /**
@@ -508,7 +536,7 @@ void VIM_DELETE_RIGHT(void) {
   print("VIM_DELETE_RIGHT\n");
   VIM_LEADER(KC_NO);
   SHIFT(KC_RIGHT);
-  CMD(KC_X);
+  SHIFT(KC_DEL);
 }
 
 /**
@@ -575,7 +603,7 @@ void VIM_CHANGE_BACK(void) {
   print("VIM_CHANGE_BACK\n");
   VIM_LEADER(KC_NO);
   VIM_DELETE_BACK();
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -586,7 +614,7 @@ void VIM_CHANGE_DOWN(void) {
   print("VIM_CHANGE_DOWN\n");
   VIM_LEADER(KC_NO);
   VIM_DELETE_DOWN();
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -598,7 +626,7 @@ void VIM_CHANGE_END(void) {
   print("VIM_CHANGE_END\n");
   VIM_LEADER(KC_NO);
   VIM_DELETE_END();
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -609,7 +637,7 @@ void VIM_CHANGE_LEFT(void) {
   print("VIM_CHANGE_LEFT\n");
   VIM_LEADER(KC_NO);
   VIM_DELETE_LEFT();
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -619,7 +647,7 @@ void VIM_CHANGE_LEFT(void) {
 void VIM_CHANGE_RIGHT(void) {
   print("VIM_CHANGE_RIGHT\n");
   VIM_DELETE_RIGHT();
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -629,7 +657,7 @@ void VIM_CHANGE_RIGHT(void) {
 void VIM_CHANGE_UP(void) {
   print("VIM_CHANGE_UP\n");
   VIM_DELETE_UP();
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /**
@@ -641,7 +669,14 @@ void VIM_CHANGE_WORD(void) {
   print("VIM_CHANGE_WORD\n");
   VIM_LEADER(KC_NO);
   VIM_DELETE_WORD();
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
+}
+
+void VIM_CHANGE_VISUAL(void) {
+  print("VIM_CHANGE_VISUAL\n");
+  VIM_LEADER(KC_NO);
+  SHIFT(KC_DEL);
+  layer_move(INSERT_MODE);
 }
 
 /***
@@ -662,7 +697,7 @@ void VIM_CHANGE_WORD(void) {
 void VIM_CHANGE_INNER_WORD(void) {
   print("VIM_CHANGE_INNER_WORD\n");
   VIM_DELETE_INNER_WORD();
-  layer_on(INSERT_MODE);
+  layer_move(INSERT_MODE);
 }
 
 /***
@@ -754,6 +789,12 @@ void VIM_VISUAL_DOWN(void) {
   SHIFT(KC_DOWN);
 }
 
+void VIM_DELETE_VISUAL(void) {
+  print("VIM_DELETE_VISUAL\n");
+  VIM_LEADER(KC_NO);
+  SHIFT(KC_DEL);
+}
+
 /***
  *     #     #  ###      ######   ######   #######  #######  ###  #     #  #######  ######
  *     #     #   #       #     #  #     #  #        #         #    #   #   #        #     #
@@ -771,7 +812,7 @@ void VIM_VISUAL_DOWN(void) {
  */
 void VIM_VISUAL_INNER_WORD(void) {
   print("VIM_VISUAL_INNER_WORD\n");
-  // VIM_LEADER(KC_NO);
   VIM_BACK();
   VIM_VISUAL_END();
+  VIM_LEADER(KC_V);
 }
