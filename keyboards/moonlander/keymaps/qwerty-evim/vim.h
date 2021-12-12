@@ -16,6 +16,14 @@
 
 uint16_t VIM_QUEUE = KC_NO;
 
+enum selected_layout {
+  ENGLISH = 0,
+  HEBREW = 1,
+  RUSSIAN = 2,
+};
+
+uint16_t SELECTED_LAYOUT = 0;
+
 enum vim_custom_keycodes {
   PLACEHOLDER = SAFE_RANGE + 10000, // can always be here
   VIM_A,
@@ -157,7 +165,7 @@ void VIM_LEADER(uint16_t keycode) {
  */
 void VIM_APPEND(void) {
   print("VIM_APPEND\n");
-  TAP(KC_RIGHT);
+  TAP(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT);
   layer_move(INSERT_MODE);
 }
 
@@ -167,9 +175,9 @@ void VIM_APPEND(void) {
  */
 void VIM_BACK(void) {
   print("VIM_BACK\n");
-  // CTRL(KC_LEFT);
+  // CTRL(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT);
   PRESS(KC_LCTRL);
-    TAP(KC_LEFT);
+    TAP(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT);
   RELEASE(KC_LCTRL);
 }
 
@@ -197,7 +205,7 @@ void VIM_DOWN(void) {
  */
 void VIM_WORD_END(void) {
   print("VIM_WORD_END\n");
-  CTRL(KC_RIGHT);
+  CTRL(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT);
 }
 
 /**
@@ -294,7 +302,7 @@ void VIM_REDO(void) {
 void VIM_SUBSTITUTE(void) {
   print("VIM_SUBSTITUTE\n");
   VIM_LEADER(KC_NO);
-  SHIFT(KC_RIGHT);
+  SHIFT(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT);
   SHIFT(KC_DEL);
   layer_move(INSERT_MODE);
 }
@@ -329,9 +337,9 @@ void VIM_WORD(void) {
   print("VIM_WORD\n");
   VIM_LEADER(KC_NO);
   PRESS(KC_LCTRL);
-    TAP(KC_RIGHT);
-    //TAP(KC_RIGHT);
-    //TAP(KC_LEFT);
+    TAP(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT);
+    //TAP(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT);
+    //TAP(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT);
   RELEASE(KC_LCTRL);
 }
 
@@ -343,7 +351,7 @@ void VIM_YANK(void) {
   print("VIM_YANK\n");
   VIM_LEADER(KC_NO);
   CMD(KC_C);
-  TAP(KC_LEFT);
+  TAP(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT);
 }
 
 /**
@@ -353,9 +361,9 @@ void VIM_YANK(void) {
 void VIM_YANK_LINE(void) {
   print("VIM_YANK_LINE\n");
   VIM_LEADER(KC_NO);
-  CMD(KC_LEFT);
+  CMD(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT);
   PRESS(KC_LSHIFT);
-    CMD(KC_RIGHT);
+    CMD(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT);
   RELEASE(KC_LSHIFT);
   CMD(KC_C);
 }
@@ -416,7 +424,7 @@ void VIM_DELETE_LINE(void) {
 void VIM_JOIN(void) {
   print("VIM_JOIN\n");
   VIM_LEADER(KC_NO);
-  CMD(KC_RIGHT);
+  CMD(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT);
   TAP(KC_DELETE);
   VIM_LEADER(KC_NO);
 }
@@ -430,7 +438,7 @@ void VIM_JOIN(void) {
 void VIM_OPEN_ABOVE(void) {
   print("VIM_OPEN_ABOVE\n");
   VIM_LEADER(KC_NO);
-  CMD(KC_LEFT);
+  CMD(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT);
   TAP(KC_ENTER);
   TAP(KC_UP);
   layer_move(INSERT_MODE);
@@ -467,7 +475,7 @@ void VIM_DELETE_END(void) {
   print("VIM_DELETE_END\n");
   VIM_LEADER(KC_NO);
   PRESS(KC_LCTRL);
-    SHIFT(KC_RIGHT); // select to end of this word
+    SHIFT(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT); // select to end of this word
   RELEASE(KC_LCTRL);
   SHIFT(KC_DEL);
 }
@@ -481,9 +489,9 @@ void VIM_DELETE_END(void) {
 void VIM_DELETE_WHOLE_LINE(void) {
   print("VIM_DELETE_WHOLE_LINE\n");
   VIM_LEADER(KC_NO);
-  CMD(KC_LEFT);
+  CMD(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT);
   PRESS(KC_LSHIFT);
-    CMD(KC_RIGHT);
+    CMD(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT);
   RELEASE(KC_LSHIFT);
   SHIFT(KC_DEL);
 }
@@ -497,9 +505,9 @@ void VIM_DELETE_WORD(void) {
   print("VIM_DELETE_WORD\n");
   VIM_LEADER(KC_NO);
   PRESS(KC_LCTRL);
-    SHIFT(KC_RIGHT); // select to end of this word
-    SHIFT(KC_RIGHT); // select to end of next word
-    SHIFT(KC_LEFT); // select to start of next word
+    SHIFT(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT); // select to end of this word
+    SHIFT(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT); // select to end of next word
+    SHIFT(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT); // select to start of next word
   RELEASE(KC_LCTRL);
   SHIFT(KC_DEL); // delete selection
 }
@@ -512,7 +520,7 @@ void VIM_DELETE_BACK(void) {
   print("VIM_DELETE_BACK\n");
   VIM_LEADER(KC_NO);
   PRESS(KC_LCTRL);
-    SHIFT(KC_LEFT); // select to start of word
+    SHIFT(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT); // select to start of word
     SHIFT(KC_DEL); // delete selection
   RELEASE(KC_LSHIFT);
 }
@@ -719,7 +727,7 @@ void VIM_VISUAL_BACK(void) {
   print("VIM_VISUAL_BACK\n");
   //VIM_LEADER(KC_NO);
   PRESS(KC_LCTRL);
-    SHIFT(KC_LEFT); // select to start of word
+    SHIFT(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT); // select to start of word
   RELEASE(KC_LCTRL);
 }
 
@@ -731,7 +739,7 @@ void VIM_VISUAL_END(void) {
   print("VIM_VISUAL_END\n");
   // VIM_LEADER(KC_NO);
   PRESS(KC_LCTRL);
-    SHIFT(KC_RIGHT); // select to end of this word
+    SHIFT(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT); // select to end of this word
   RELEASE(KC_LCTRL);
 }
 
@@ -743,9 +751,9 @@ void VIM_VISUAL_WORD(void) {
   print("VIM_VISUAL_WORD\n");
   // VIM_LEADER(KC_NO);
   PRESS(KC_LCTRL);
-    //SHIFT(KC_RIGHT); // select to end of this word
-    SHIFT(KC_RIGHT); // select to end of next word
-    //SHIFT(KC_LEFT); // select to start of next word
+    //SHIFT(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT); // select to end of this word
+    SHIFT(SELECTED_LAYOUT == HEBREW ? KC_LEFT : KC_RIGHT); // select to end of next word
+    //SHIFT(SELECTED_LAYOUT == HEBREW ? KC_RIGHT : KC_LEFT); // select to start of next word
   RELEASE(KC_LCTRL);
 }
 

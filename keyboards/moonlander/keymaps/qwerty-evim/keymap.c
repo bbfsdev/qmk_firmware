@@ -475,7 +475,7 @@ void dance_1_finished(qk_tap_dance_state_t *state, void *user_data) {
     dance_state[1].step = dance_step(state);
     switch (dance_state[1].step) {
         case SINGLE_TAP: register_code16(KC_1); break;
-        case SINGLE_HOLD: register_code16(LCTL(KC_1)); break;
+        case SINGLE_HOLD: register_code16(LCTL(KC_1)); SELECTED_LAYOUT = ENGLISH; break;
         case DOUBLE_TAP: register_code16(KC_1); register_code16(KC_1); break;
         case DOUBLE_SINGLE_TAP: tap_code16(KC_1); register_code16(KC_1);
     }
@@ -510,7 +510,7 @@ void dance_2_finished(qk_tap_dance_state_t *state, void *user_data) {
     dance_state[2].step = dance_step(state);
     switch (dance_state[2].step) {
         case SINGLE_TAP: register_code16(KC_2); break;
-        case SINGLE_HOLD: register_code16(LCTL(KC_2)); break;
+        case SINGLE_HOLD: register_code16(LCTL(KC_2)); SELECTED_LAYOUT = HEBREW; break;
         case DOUBLE_TAP: register_code16(KC_2); register_code16(KC_2); break;
         case DOUBLE_SINGLE_TAP: tap_code16(KC_2); register_code16(KC_2);
     }
@@ -545,7 +545,7 @@ void dance_3_finished(qk_tap_dance_state_t *state, void *user_data) {
     dance_state[3].step = dance_step(state);
     switch (dance_state[3].step) {
         case SINGLE_TAP: register_code16(KC_3); break;
-        case SINGLE_HOLD: register_code16(LCTL(KC_3)); break;
+        case SINGLE_HOLD: register_code16(LCTL(KC_3)); SELECTED_LAYOUT = RUSSIAN; break;
         case DOUBLE_TAP: register_code16(KC_3); register_code16(KC_3); break;
         case DOUBLE_SINGLE_TAP: tap_code16(KC_3); register_code16(KC_3);
     }
