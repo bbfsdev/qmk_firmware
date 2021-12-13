@@ -343,7 +343,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return false;
 
   case VIM_V:
-    if (record->event.pressed) { VIM_LEADER(VIM_V); }
+    if (record->event.pressed) {
+      VIM_LEADER(VIM_V);
+      if (SHIFTED) VIM_VISUAL_WHOLE_LINE(l_shifted, r_shifted);
+    }
     return false;
 
   case VIM_W:

@@ -96,6 +96,7 @@ void VIM_VISUAL_LEFT(void);
 void VIM_VISUAL_RIGHT(void);
 void VIM_VISUAL_UP(void);
 void VIM_VISUAL_WORD(void);
+void VIM_VISUAL_WHOLE_LINE(bool l_shifted, bool r_shifted);
 void VIM_WORD(void);
 void VIM_YANK(void);
 
@@ -795,6 +796,21 @@ void VIM_VISUAL_DOWN(void) {
   print("VIM_VISUAL_DOWN\n");
   //VIM_LEADER(KC_NO);
   SHIFT(KC_DOWN);
+}
+
+/**
+ * Vim-like shift+v command.
+ */
+void VIM_VISUAL_WHOLE_LINE(bool l_shifted, bool r_shifted) {
+  print("VIM_VISUAL_WHOLE_LINE\n");
+  if (l_shifted) RELEASE(KC_LSHIFT);
+  if (r_shifted) RELEASE(KC_RSHIFT);
+  TAP(KC_HOME);
+  PRESS(KC_LSHIFT);
+    TAP(KC_END);
+  RELEASE(KC_LSHIFT);
+  if (l_shifted) PRESS(KC_LSHIFT);
+  if (r_shifted) PRESS(KC_RSHIFT);
 }
 
 void VIM_DELETE_VISUAL(void) {
